@@ -332,17 +332,10 @@ int main(){
       cout << "{\"x\":" << hg.fingerTips[i].x << ",\"y\":" << hg.fingerTips[i].y << "}";
       if (hg.fingerTips.size()-1 > i) cout << "," ;
     }
-    //cout << endl <<  hg.contours.size() << endl;
-    //if (hg.contours.size() > 0) cout << hg.contours[0].size() << endl;
-    //for (int i = 0; i < hg.contours.size(); i++) {
-      //for (int j = 0; i < hg.contours[i].size(); j++) {
-        //cout <<  << endl;
-      //}
-    //}
+
+    // @TODO ajouter rectangle
 
     cout << "], \"isHand\": " << hg.isHand  <<"}" << endl;
-
-
 
     if(cv::waitKey(30) == char('q')) break;
   }
