@@ -340,7 +340,7 @@ int main(){
       //}
     //}
 
-    cout << "]}" << endl;
+    cout << "], \"isHand\": " << hg.isHand  <<"}" << endl;
 
 
 
