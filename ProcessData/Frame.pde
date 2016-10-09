@@ -1,8 +1,11 @@
 public class Frame {
   private int width, height, total_pixel_count, detected_pixel_count, detected_pixel_delta;
   private float x_center_position, y_center_position, x_center_delta, y_center_delta;
+  public String raw;
   
   public Frame(String line) {
+    println(line);
+    raw = line;
     String[] numbers = split(line, ' ');
     width = int(numbers[0]);
     height = int(numbers[1]);
