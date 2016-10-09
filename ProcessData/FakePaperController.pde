@@ -9,7 +9,7 @@ public class FakePaperController implements PaperController {
   
   public Frame waitForFrame() {
     if (cursor < lines.length) {
-      delay(50);
+      delay(20);
       return new Frame(lines[cursor++]);
     }
     
