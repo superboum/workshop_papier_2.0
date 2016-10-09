@@ -25,10 +25,10 @@ public class Frame {
   }
   
   public PVector getCenterOfPaper() {
-    return new PVector(x_center_position,y_center_position);
+    return new PVector(x_center_position / width,y_center_position / height);
   }
   
   public PVector getEvolutionCenterOfPaper() {
-    return new PVector(x_center_delta,y_center_delta);
+    return new PVector(x_center_delta / width,y_center_delta / height);
   }
 }
