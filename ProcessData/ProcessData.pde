@@ -10,9 +10,22 @@ void setup() {
   frameRate(60);
 }
 
+void keyPressed() {
+  controller.changeState();
+}
+
 void draw() {
-  Frame f = controller.waitForFrame();
-  if (f != null) {
+  
+  if (controller.getStatus() == "etalonnage") {
+    Calibration c = controller.waitForColor();
+    if (c != null) {
+      background(c.red,c.green,c.blue);
+    } else {
+      //background(255,0,0);
+    }
+  } else if (controller.getStatus() == "capture") {
+    Frame f = controller.waitForFrame();
+    if (f != null) {
     /*println(
       f.getCenterOfPaper().x,
       f.getCenterOfPaper().y,
@@ -21,10 +34,11 @@ void draw() {
       f.getEvolutionCenterOfPaper().y,
       f.getEvolutionPixelCount()
     ); */
-    background(255,204,0); 
+      background(255,204,0); 
     
-    ellipse(f.getCenterOfPaper().x * width, f.getCenterOfPaper().y * height, int(f.getDetectedPixelCount() * 500), int(f.getDetectedPixelCount() * 500));
-    noStroke();
-    fill(0,0,0);
+      ellipse(f.getCenterOfPaper().x * width, f.getCenterOfPaper().y * height, int(f.getDetectedPixelCount() * 500), int(f.getDetectedPixelCount() * 500));
+      noStroke();
+      fill(0,0,0);
+    }
   }
 }  

@@ -31,8 +31,8 @@ etalonnage = True
 while etalonnage:
     _, frame = cap.read()
     cv2.rectangle(frame, etalonnage_top_left, etalonnage_bottom_right, (255, 0, 0), 5)
-    cv2.imshow('frame',frame)
-    k = cv2.waitKey(5) & 0xFF
+    #cv2.imshow('frame',frame)
+    #k = cv2.waitKey(5) & 0xFF
 
     # Moyenner sur plein d'images
     count_pix = 0
@@ -78,7 +78,7 @@ while(1):
     # Bitwise-AND mask and original image
     # res = cv2.bitwise_and(frame,frame, mask= mask)
 
-    cv2.imshow('mask',mask)
+    #cv2.imshow('mask',mask)
     #cv2.imshow('frame',frame)
 
     white_pixel_count = cv2.countNonZero(mask)
@@ -108,8 +108,8 @@ while(1):
     old_white_pixel_count = white_pixel_count
     old_centroid = centroid
 
-    k = cv2.waitKey(5) & 0xFF
-    if k == 27:
-      break
+    #k = cv2.waitKey(5) & 0xFF
+    #if k == 27:
+      #break
 
-cv2.destroyAllWindows()
+#cv2.destroyAllWindows()

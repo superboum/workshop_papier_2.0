@@ -6,16 +6,16 @@ public class Frame {
   public Frame(String line) {
     raw = line;
     String[] numbers = split(line, ' ');
-    width = int(numbers[0]);
-    height = int(numbers[1]);
+    width = int(numbers[1]);
+    height = int(numbers[2]);
     total_pixel_count = width*height;
     
-    detected_pixel_count = int(numbers[2]);
-    detected_pixel_delta = int(numbers[3]);
-    x_center_position = float(numbers[4]);
-    y_center_position = float(numbers[5]);
-    x_center_delta = float(numbers[6]);
-    y_center_delta = float(numbers[7]);
+    detected_pixel_count = int(numbers[3]);
+    detected_pixel_delta = int(numbers[4]);
+    x_center_position = float(numbers[5]);
+    y_center_position = float(numbers[6]);
+    x_center_delta = float(numbers[7]);
+    y_center_delta = float(numbers[8]);
   }
   
   public float getDetectedPixelCount() {
