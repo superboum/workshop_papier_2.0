@@ -76,7 +76,6 @@ while(1):
     cv2.imshow('mask',mask)
     cv2.imshow('frame',frame)
 
-    total_pixel_count = width * height
     white_pixel_count = cv2.countNonZero(mask)
 
     moments = cv2.moments(mask, False)
@@ -85,7 +84,7 @@ while(1):
     movement_size = white_pixel_count - old_white_pixel_count
     movement_position = (centroid[0] - old_centroid[0], centroid[1] - old_centroid[1])
 
-    print total_pixel_count, white_pixel_count, movement_size, centroid[0], centroid[1], movement_position[0], movement_position[1]
+    print width, height, white_pixel_count, movement_size, centroid[0], centroid[1], movement_position[0], movement_position[1]
 
     ######### AFTER
     old_white_pixel_count = white_pixel_count
