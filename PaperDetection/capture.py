@@ -4,6 +4,8 @@ import requests
 import json
 import time
 
+from communication import Communication
+
 ### A CONFIGURER !
 
 DELTA = 50
@@ -14,9 +16,11 @@ DETECT_GREEN = 0
 
 ### CODE
 
+com = Communication()
+com.start()
 cap = cv2.VideoCapture(0)
 
-#### Etalonnage
+### Etalonnage
 _, frame = cap.read()
 height, width, channels = frame.shape
 etalonnage_top_left = (width/2 - SIZE, height / 2 - SIZE)
@@ -79,12 +83,24 @@ while(1):
     white_pixel_count = cv2.countNonZero(mask)
 
     moments = cv2.moments(mask, False)
-    centroid = (moments['m10']/moments['m00'], moments['m01']/moments['m00'])
+    try:
+        centroid = (moments['m10']/moments['m00'], moments['m01']/moments['m00'])
+    except:
+        centroid = old_centroid
 
     movement_size = white_pixel_count - old_white_pixel_count
     movement_position = (centroid[0] - old_centroid[0], centroid[1] - old_centroid[1])
 
-    print width, height, white_pixel_count, movement_size, centroid[0], centroid[1], movement_position[0], movement_position[1]
+    data = str(width)+" "+ \
+                  str(height)+" "+ \
+                  str(white_pixel_count)+" "+ \
+                  str(movement_size)+" "+ \
+                  str(centroid[0])+" "+ \
+                  str(centroid[1])+" "+ \
+                  str(movement_position[0])+" "+ \
+                  str(movement_position[1])+"\n"
+
+    com.send(data)
 
     ######### AFTER
     old_white_pixel_count = white_pixel_count

@@ -1,12 +1,12 @@
 PaperController controller;
 
 void setup() {
-  controller = new FakePaperController("/home/qdufour/Documents/dev/processing/workshop_papier/ProcessData/example_data.txt");
-  //controller = new NetworkPaperController(this, "127.0.0.1", 5284);
+  //controller = new FakePaperController("/home/qdufour/Documents/dev/processing/workshop_papier/ProcessData/example_data.txt");
+  controller = new NetworkPaperController(this, "127.0.0.1", 5984);
   
   smooth(8);
-  //fullScreen(P2D, SPAN);
-  size(800, 600);
+  fullScreen(P2D, SPAN);
+  //size(800, 600);
   frameRate(60);
 }
 
