@@ -29,6 +29,7 @@ while start_time+4 > time.time():
     cv2.imshow('frame',frame)
     k = cv2.waitKey(5) & 0xFF
 
+# Moyenner sur plein d'images
 count_pix = 0
 for i in range (etalonnage_top_left[0]+1, etalonnage_bottom_right[0]):
     for j in range(etalonnage_top_left[1]+1, etalonnage_bottom_right[1]):
@@ -51,6 +52,8 @@ cv2.destroyAllWindows()
 
 #### Capture
 i = 0
+old_white_pixel_count = 0
+old_centroid = (0,0)
 while(1):
 
     # Take each frame
@@ -72,6 +75,22 @@ while(1):
 
     cv2.imshow('mask',mask)
     cv2.imshow('frame',frame)
+
+    total_pixel_count = width * height
+    white_pixel_count = cv2.countNonZero(mask)
+
+    moments = cv2.moments(mask, False)
+    centroid = (moments['m10']/moments['m00'], moments['m01']/moments['m00'])
+
+    movement_size = white_pixel_count - old_white_pixel_count
+    movement_position = (centroid[0] - old_centroid[0], centroid[1] - old_centroid[1])
+
+    print total_pixel_count, white_pixel_count, movement_size, centroid[0], centroid[1], movement_position[0], movement_position[1]
+
+    ######### AFTER
+    old_white_pixel_count = white_pixel_count
+    old_centroid = centroid
+
     k = cv2.waitKey(5) & 0xFF
     if k == 27:
       break
