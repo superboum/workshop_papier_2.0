@@ -17,7 +17,7 @@ class Serv():
         setattr(self, "read_list", [sock])
 
 
-    def listen(self):
+    def listen(self, q):
         while (True):      
             readable, writable, errored = select.select(self.read_list, [], [])
             for s in readable:
@@ -28,7 +28,8 @@ class Serv():
                 else:
                     data = s.recv(1024)
                     if data:
-                        print data
+                        print(data)
+                        q.put(data)
                     else:
                         s.close()
                         self.read_list.remove(s)
