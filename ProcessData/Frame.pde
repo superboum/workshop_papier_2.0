@@ -4,7 +4,6 @@ public class Frame {
   public String raw;
   
   public Frame(String line) {
-    println(line);
     raw = line;
     String[] numbers = split(line, ' ');
     width = int(numbers[0]);
