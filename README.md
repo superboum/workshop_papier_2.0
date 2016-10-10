@@ -6,18 +6,40 @@ We detect the position and the size of the detected paper.
 When we manipulate the paper, the position and the size detected is modified.
 We use this data to control the display and fairy lights.
 
+protocol
+--------
 
-PaperDetecttion/example_data.txt
---------------------------------
+An example :
 
-Values are in the following order :
- * width
- * height (with the width you can calculate the number of pixel)
- * number of detected pixel (the paper)
- * difference of detected pixel between 2 pictures
- * x position of the center of the paper
- * y position of the center of the paper
- * x movement of the center of the paper
- * y movement of the center of the paper
+```
+--> ETA 125 230 126
+--> ETA 126 233 128
+<-- OK
+--> CAP 800 600 25263 0 230.0 126.0 0.0 0.0
+--> CAP 800 600 25262 -1 220.0 120.0 -10.0 -6.0
+<-- OK
+--> ETA 126 233 122
+...
+```
 
-Data could be normalized with the width and the height
+### ETA (Server sends to Client)
+
+ETA means "etalonnage" (calibration). The three numbers are the RGB color (0 to 255).
+
+```
+ETA red(int, 0-255) green(int, 0-255) blue(int, 0-255)
+```
+
+### CAP (Server sends to Client)
+
+CAP means "capture".
+
+```
+CAP width(int) height(int) detected_pixel_count(int) detected_pixel_count_delta(int) paper_position_x(float) paper_position_y(float) paper_position_x_delta(float) paper_position_y_delta(float)
+```
+
+### OK (Client sends to Server)
+
+OK means... OK
+Just to switch betwean ETA and CAP...
+
