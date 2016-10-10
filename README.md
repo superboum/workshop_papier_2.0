@@ -1,6 +1,12 @@
 workshop
 ========
 
+We use a webcam to detect a colored paper with opencv and python.
+We detect the position and the size of the detected paper.
+When we manipulate the paper, the position and the size detected is modified.
+We use this data to control the display and fairy lights.
+
+
 PaperDetecttion/example_data.txt
 --------------------------------
 

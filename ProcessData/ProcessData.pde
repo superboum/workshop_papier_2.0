@@ -33,7 +33,6 @@ void keyPressed() {
 }
 
 void draw() {
-
   if (controller.getStatus() == "etalonnage") etalonnage();
   else if (controller.getStatus() == "capture") capture();
 }  
