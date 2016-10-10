@@ -6,6 +6,30 @@ We detect the position and the size of the detected paper.
 When we manipulate the paper, the position and the size detected is modified.
 We use this data to control the display and fairy lights.
 
+how to use it
+-------------
+
+### Run the capture server (no GUI needed)
+
+You need python, opencv and opencv for python
+
+```
+cd PaperDetection
+python2 capture.py
+```
+
+### Debug the PaperDetection server
+
+```
+nc 127.0.0.1 5984
+```
+
+### Run the viewer and the arduino controller
+
+```
+open and run with processing the PaperViewerController.pde
+```
+
 protocol
 --------
 
@@ -40,6 +64,6 @@ CAP width(int) height(int) detected_pixel_count(int) detected_pixel_count_delta(
 
 ### OK (Client sends to Server)
 
-OK means... OK
-Just to switch betwean ETA and CAP...
+OK means... OK.
+Just to switch between ETA and CAP...
 
