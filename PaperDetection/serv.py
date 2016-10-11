@@ -36,7 +36,7 @@ class Serv():
                             s.close()
                             self.read_list.remove(s)
             except:
-                print("tcp listen terminated by an error or the exit")
+                print("tcp listen terminated by an error or an exit")
 
     def send(self, message):
         for sock in self.read_list:

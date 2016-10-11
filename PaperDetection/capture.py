@@ -121,10 +121,4 @@ class Capture():
     def terminate(self):
         self.com.terminate()
 
-try:
-    cp = Capture()
-    cp.run()
-except:
-    cp.terminate()
-    print "Bye"
-    sys.exit()
+
