@@ -6,7 +6,7 @@ def listener(server,q):
     server.listen(q)
 
 def sender(server, q):
-    while True:
+    while server.running:
         server.send(q.get())
 
 class Communication():
@@ -29,12 +29,7 @@ class Communication():
     def send(self, message):
         self.emit_queue.put(message)
 
-#q = Queue()
-#s = Serv()
-#q.put("hello")
-#q.put("world")
-#t1 = Thread(target=listener, args=(s,))
-#t2 = Thread(target=sender, args=(s,q,))
-#t1.start()
-#t2.start()
-
+    def terminate(self):
+        self.serv.running = False
+        self.emit_queue.put("BYE")
+        self.serv.sock.shutdown(0)

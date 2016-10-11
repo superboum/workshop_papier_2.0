@@ -6,6 +6,7 @@ class Serv():
     sock = None
     read_list = []
     port = 5984
+    running = True
 
     def __init__(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,21 +19,24 @@ class Serv():
 
 
     def listen(self, q):
-        while (True):      
-            readable, writable, errored = select.select(self.read_list, [], [])
-            for s in readable:
-                if s is self.sock:
-                    client_socket, address = self.sock.accept()
-                    self.read_list.append(client_socket)
-                    print "Connection from", address
-                else:
-                    data = s.recv(1024)
-                    if data:
-                        print(data)
-                        q.put(data)
+        while self.running:
+            try:
+                readable, writable, errored = select.select(self.read_list, [], [])
+                for s in readable:
+                    if s is self.sock:
+                        client_socket, address = self.sock.accept()
+                        self.read_list.append(client_socket)
+                        print "Connection from", address
                     else:
-                        s.close()
-                        self.read_list.remove(s)
+                        data = s.recv(1024)
+                        if data:
+                            print(data)
+                            q.put(data)
+                        else:
+                            s.close()
+                            self.read_list.remove(s)
+            except:
+                print("tcp listen terminated by an error or the exit")
 
     def send(self, message):
         for sock in self.read_list:

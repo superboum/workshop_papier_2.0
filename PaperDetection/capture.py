@@ -3,113 +3,128 @@ import numpy as np
 import requests
 import json
 import time
+import sys
 
 from communication import Communication
 
 ### A CONFIGURER !
 
-DELTA = 50
-SIZE = 50
-DETECT_RED = 0
-DETECT_BLUE = 0
-DETECT_GREEN = 0
+class Capture():
 
-### CODE
+    selected_color = (0, 0, 0)
 
-com = Communication()
-com.start()
-cap = cv2.VideoCapture(0)
+    width = 0
+    height = 0
+    detection_size = 50
+    detection_delta = 50
 
-### Etalonnage
-_, frame = cap.read()
-height, width, channels = frame.shape
-etalonnage_top_left = (width/2 - SIZE, height / 2 - SIZE)
-etalonnage_bottom_right = (width/2 + SIZE, height / 2 + SIZE)
+    etalonnage_top_left = 0
+    etalonnage_bottom_right = 0
 
-print("--- ETALONNAGE ---")
-etalonnage = True
-while etalonnage:
-    _, frame = cap.read()
-    cv2.rectangle(frame, etalonnage_top_left, etalonnage_bottom_right, (255, 0, 0), 5)
-    #cv2.imshow('frame',frame)
-    #k = cv2.waitKey(5) & 0xFF
+    cap, com = (None,)*2
+    upper_bound, lower_bound = (None,)*2
 
-    # Moyenner sur plein d'images
-    count_pix = 0
-    for i in range (etalonnage_top_left[0]+1, etalonnage_bottom_right[0]):
-        for j in range(etalonnage_top_left[1]+1, etalonnage_bottom_right[1]):
-            DETECT_BLUE += frame[j][i][0]
-            DETECT_GREEN += frame[j][i][1]
-            DETECT_RED += frame[j][i][2]
-            count_pix += 1
+    def __init__(self):
+        self.com = Communication()
+        self.com.start()
 
-    DETECT_BLUE /= count_pix
-    DETECT_GREEN /= count_pix
-    DETECT_RED /= count_pix
+        self.cap = cv2.VideoCapture(0)
+        _, frame = self.cap.read()
+        self.height, self.width, _ = frame.shape
+        self.etalonnage_top_left = (self.width/2 - self.detection_size, self.height / 2 - self.detection_size)
+        self.etalonnage_bottom_right = (self.width/2 + self.detection_size, self.height / 2 + self.detection_size)
 
-    com.send("ETA "+str(DETECT_RED)+" "+str(DETECT_GREEN)+" "+str(DETECT_BLUE)+"\n")
+    ### Etalonnage
+    def etalonnage(self):
+        print("--- ETALONNAGE ---")
+        while True:
+            _, frame = self.cap.read()
+            cv2.rectangle(frame, self.etalonnage_top_left, self.etalonnage_bottom_right, (255, 0, 0), 5)
+            # @TODO @IMPROVEMENT Moyenner sur plein d'images
+            detect_blue, detect_green, detect_red, count_pix = (0,)*4
+            for i in range(self.etalonnage_top_left[0]+1, self.etalonnage_bottom_right[0]):
+                for j in range(self.etalonnage_top_left[1]+1, self.etalonnage_bottom_right[1]):
+                    detect_blue += frame[j][i][0]
+                    detect_green += frame[j][i][1]
+                    detect_red += frame[j][i][2]
+                    count_pix += 1
 
-    if not com.receive().empty():
-        com.receive().get()
-        etalonnage = False
+            self.selected_color = ( \
+                detect_blue / count_pix, \
+                detect_green / count_pix, \
+                detect_red / count_pix, \
+            )
 
-#### Capture
+            self.com.send("ETA "+str(self.selected_color[0])+" "+str(self.selected_color[1])+" "+str(self.selected_color[2])+"\n")
 
-print("--- CAPTURE ---")
-i = 0
-old_white_pixel_count = 0
-old_centroid = (0,0)
-while(1):
+            if not self.com.receive().empty():
+                self.calculate_bounds()
+                return self.com.receive().get()
 
-    # Take each frame
-    _, frame = cap.read()
+    def calculate_bounds(self):
+        # define range of blue color in BGR format
+        self.lower_bound = np.array([ \
+                max(self.selected_color[0] - self.detection_delta, 0), \
+                max(self.selected_color[1] - self.detection_delta, 0), \
+                max(self.selected_color[2] - self.detection_delta, 0) \
+            ], dtype=np.uint8)
 
-    # Convert BGR to HSV
-    # hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        self.upper_bound = np.array([ \
+                min(self.selected_color[0] + self.detection_delta, 255), \
+                min(self.selected_color[1] + self.detection_delta, 255), \
+                min(self.selected_color[2] + self.detection_delta, 255) \
+            ], dtype=np.uint8)
 
-    # define range of blue color in BGR format
-    lower_blue = np.array([max(DETECT_BLUE-DELTA, 0), max(DETECT_GREEN-DELTA, 0), max(DETECT_RED-DELTA, 0)], dtype=np.uint8)
-    upper_blue = np.array([min(DETECT_BLUE+DELTA, 255), min(DETECT_GREEN+DELTA, 255), min(DETECT_RED+DELTA, 255)],  dtype=np.uint8)
+    #### Capture
+    def capture(self):
+        print("--- CAPTURE ---")
+        old_white_pixel_count = 0
+        old_centroid = (0, 0)
+        while True:
+            _, frame = self.cap.read()
 
+            mask = cv2.inRange(frame, self.lower_bound, self.upper_bound)
+            white_pixel_count = cv2.countNonZero(mask)
+            moments = cv2.moments(mask, False)
+            try:
+                centroid = (moments['m10']/moments['m00'], moments['m01']/moments['m00'])
+            except:
+                centroid = old_centroid
 
-    # Threshold the HSV image to get only blue colors
-    mask = cv2.inRange(frame, lower_blue, upper_blue)
+            movement_size = white_pixel_count - old_white_pixel_count
+            movement_position = (centroid[0] - old_centroid[0], centroid[1] - old_centroid[1])
 
-    # Bitwise-AND mask and original image
-    # res = cv2.bitwise_and(frame,frame, mask= mask)
+            data = "CAP "+ \
+                          str(self.width)+" "+ \
+                          str(self.height)+" "+ \
+                          str(white_pixel_count)+" "+ \
+                          str(movement_size)+" "+ \
+                          str(centroid[0])+" "+ \
+                          str(centroid[1])+" "+ \
+                          str(movement_position[0])+" "+ \
+                          str(movement_position[1])+"\n"
 
-    #cv2.imshow('mask',mask)
-    #cv2.imshow('frame',frame)
+            self.com.send(data)
 
-    white_pixel_count = cv2.countNonZero(mask)
+            ######### AFTER
+            old_white_pixel_count = white_pixel_count
+            old_centroid = centroid
 
-    moments = cv2.moments(mask, False)
-    try:
-        centroid = (moments['m10']/moments['m00'], moments['m01']/moments['m00'])
-    except:
-        centroid = old_centroid
+            if not self.com.receive().empty():
+                return self.com.receive().get()
 
-    movement_size = white_pixel_count - old_white_pixel_count
-    movement_position = (centroid[0] - old_centroid[0], centroid[1] - old_centroid[1])
+    def run(self):
+        while True:
+            self.etalonnage()
+            self.capture()
 
-    data = "CAP "+ \
-                  str(width)+" "+ \
-                  str(height)+" "+ \
-                  str(white_pixel_count)+" "+ \
-                  str(movement_size)+" "+ \
-                  str(centroid[0])+" "+ \
-                  str(centroid[1])+" "+ \
-                  str(movement_position[0])+" "+ \
-                  str(movement_position[1])+"\n"
+    def terminate(self):
+        self.com.terminate()
 
-    com.send(data)
-
-    ######### AFTER
-    old_white_pixel_count = white_pixel_count
-    old_centroid = centroid
-
-    #k = cv2.waitKey(5) & 0xFF
-    #if k == 27:
-      #break
-
-#cv2.destroyAllWindows()
+try:
+    cp = Capture()
+    cp.run()
+except:
+    cp.terminate()
+    print "Bye"
+    sys.exit()
