@@ -5,7 +5,7 @@ public class Calibration {
     String[] numbers = split(line, ' ');
     red = int(numbers[1]);
     green = int(numbers[2]);
-    blue = int(numbers[3]);
+    blue = int(numbers[3].substring(0, numbers[3].length()-1));
   }
   
   

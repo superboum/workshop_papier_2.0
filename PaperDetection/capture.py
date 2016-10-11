@@ -55,7 +55,7 @@ class Capture():
                 detect_red / count_pix, \
             )
 
-            self.com.send("ETA "+str(self.selected_color[0])+" "+str(self.selected_color[1])+" "+str(self.selected_color[2])+"\n")
+            self.com.send("ETA "+str(self.selected_color[2])+" "+str(self.selected_color[1])+" "+str(self.selected_color[0])+"\n")
 
             if not self.com.receive().empty():
                 self.calculate_bounds()

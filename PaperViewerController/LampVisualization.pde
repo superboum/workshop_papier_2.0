@@ -1,4 +1,4 @@
-public class LampVisualization {
+public class LampVisualization implements Visualization {
   private LED led;
   
   public LampVisualization(LED led) {
@@ -14,5 +14,8 @@ public class LampVisualization {
   }
   
   public void draw(Calibration c) {
+  }
+  
+  public void keyPressed() {
   }
 }

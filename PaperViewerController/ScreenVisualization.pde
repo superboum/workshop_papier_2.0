@@ -1,4 +1,4 @@
-public class ScreenVisualization {
+public class ScreenVisualization implements Visualization {
   private int vis_width;
   private int vis_height;
   private int position_x;
@@ -16,7 +16,7 @@ public class ScreenVisualization {
   }
   
   public void draw(Calibration c) {
-    background(c.red, c.green, c.blue);
+    setBackground(c.red, c.green, c.blue);
   }
 
   public void draw(Frame f) {
