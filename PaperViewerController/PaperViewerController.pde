@@ -21,21 +21,13 @@ int bleu = 0;
 
 void keyPressed() {
   controller.changeState();
-  /*if (key == 'r') rouge += 10;
-   if (key == 'v') vert += 10;
-   if (key == 'b') bleu += 10;
-   if (key == 'R') rouge -= 10;
-   if (key == 'V') vert -= 10;
-   if (key == 'B') bleu -= 10;  
-   
-   
-   led.setColor(min(255,rouge),min(255,vert),min(255,bleu));*/
+  led.setColor(min(255,rouge),min(255,vert),min(255,bleu));
 }
 
 void draw() {
   if (controller.getStatus() == "etalonnage") etalonnage();
   else if (controller.getStatus() == "capture") capture();
-}  
+}
 
 void etalonnage() {
   Calibration c = controller.waitForColor();
