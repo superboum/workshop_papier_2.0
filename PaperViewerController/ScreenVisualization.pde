@@ -23,10 +23,13 @@ public class ScreenVisualization implements Visualization {
     displayBackground(f);
     displayText(f);
     displayBall(f);
+    
+    if (controller.getSequenceManager().getStatus() instanceof SequenceWait) {
+      setBackground(255,255,255);
+    }
   }
    
   public void keyPressed() {
-      controller.changeState();
   }
   
   /** PRIVATE **/
@@ -56,7 +59,7 @@ public class ScreenVisualization implements Visualization {
     int blue_ball = min(0, int(f.getEvolutionPixelCount() * 500));
   
     float size = min(vis_height, int(f.getDetectedPixelCount() * vis_height * 1.2));
-  
+    
     fill(red_ball, green_ball, blue_ball);    
     ellipse(vis_width/2+position_x, vis_height/2+position_y, size, size);
     noStroke();    

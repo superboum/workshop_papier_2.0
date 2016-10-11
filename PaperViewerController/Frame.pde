@@ -2,8 +2,10 @@ public class Frame {
   private int width, height, total_pixel_count, detected_pixel_count, detected_pixel_delta;
   private float x_center_position, y_center_position, x_center_delta, y_center_delta;
   public String raw;
+  private int time;
   
   public Frame(String line) {
+    time = millis();
     raw = line;
     String[] numbers = split(line, ' ');
     width = int(numbers[1]);
@@ -32,5 +34,9 @@ public class Frame {
   
   public PVector getEvolutionCenterOfPaper() {
     return new PVector(x_center_delta / width,y_center_delta / height);
+  }
+  
+  public int getTime() {
+    return time;
   }
 }

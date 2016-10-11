@@ -1,8 +1,9 @@
 import processing.net.*; 
 
 public class NetworkPaperController implements PaperController {
-  Client connection;
-  String status = "etalonnage";
+  private Client connection;
+  private ControllerStatus status = new CalibrationStatus();
+  private SequenceManager sequenceManager = new SequenceManager();
   
   public NetworkPaperController(PApplet processing, String ip, int port) {
     connection = new Client(processing, ip, port);
@@ -12,11 +13,11 @@ public class NetworkPaperController implements PaperController {
     String read = connection.readStringUntil('\n');
     if (read == null) return null;
     if (split(read, ' ')[0].contains("ETA")) {
-      status = "etalonnage";
+      status = new CalibrationStatus();
       return read;
     }
     if (split(read, ' ')[0].contains("CAP")) {
-      status = "capture";
+      status = new CaptureStatus();
       return read;
     }
     return null;
@@ -24,21 +25,29 @@ public class NetworkPaperController implements PaperController {
   
   public Calibration waitForColor() {
     String read = getLine();
-    if (status != "etalonnage") return null;
+    if (!(status instanceof CalibrationStatus)) return null;
     return read == null ? null : new Calibration(read);
   }  
   
   public Frame waitForFrame() {
     String read = getLine();
-    if (status != "capture") return null;
-    return read == null ? null : new Frame(read);
+    if (read != null && status instanceof CaptureStatus) { 
+      Frame lastFrame = new Frame(read);
+      sequenceManager.notifyFrame(lastFrame);
+      return lastFrame;
+    }
+    return null;
+  }
+  
+  public SequenceManager getSequenceManager() {
+    return sequenceManager;
   }
   
   public void changeState() {
     connection.write("OK\n");
   }
   
-  public String getStatus() {
+  public ControllerStatus getStatus() {
     return status;
   }
 }

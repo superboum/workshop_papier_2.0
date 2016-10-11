@@ -7,8 +7,8 @@ public class FakePaperController implements PaperController {
     cursor = 0;
   }
   
-  public String getStatus() {
-    return "";
+  public ControllerStatus getStatus() {
+    return new CaptureStatus();
   }
   
   public Calibration waitForColor() {
@@ -26,5 +26,9 @@ public class FakePaperController implements PaperController {
   }
   
   public void changeState() {
+  }
+  
+  public SequenceManager getSequenceManager() {
+    return null;
   }
 }
