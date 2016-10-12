@@ -9,8 +9,7 @@ void setup() {
 
   vis = new ArrayList();
   
-  /*
-  for(int i = 0; i < 6; i++) {
+  /*for(int i = 0; i < 6; i++) {
     for (int j = 0; j < 4; j++) {
         vis.add(new ScreenVisualization(width/6, height/4, width / 6 * i, height / 4 * j));
     }

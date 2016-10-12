@@ -20,12 +20,14 @@ public class ScreenVisualization implements Visualization {
   }
 
   public void draw(Frame f) {
-    displayBackground(f);
-    displayText(f);
-    displayBall(f);
-    
-    if (controller.getSequenceManager().getStatus() instanceof SequenceWait) {
-      setBackground(255,255,255);
+    if (controller.getSequenceManager().getStatus() instanceof SequenceInProgress) {
+      displayBackground(f);
+      displayMainText(f);
+      displayBall(f);  
+    } else if (controller.getSequenceManager().getStatus() instanceof SequenceWait) {
+      setBackground(130,30,0);
+      displayExplanationText(f);
+    } else {
     }
   }
    
@@ -45,7 +47,15 @@ public class ScreenVisualization implements Visualization {
     noStroke();  
   }
   
-  private void displayText(Frame f) {
+  private void displayExplanationText(Frame f) {
+    textSize(32 * vis_height / 1080);
+    fill(255,209,209);
+    textFont(font, 80 * vis_height / 1080);
+    textAlign(CENTER, CENTER);
+    text("MONTRE MOI TON PAPIER", vis_width/2+position_x, vis_height/2+position_y);
+  }
+  
+  private void displayMainText(Frame f) {
     textSize(32 * vis_height / 1080);
     fill(130,30,0);
     textFont(font, 80 * vis_height / 1080);

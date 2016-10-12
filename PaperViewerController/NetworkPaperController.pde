@@ -50,4 +50,4 @@ public class NetworkPaperController implements PaperController {
   public ControllerStatus getStatus() {
     return status;
   }
-}
+}  
