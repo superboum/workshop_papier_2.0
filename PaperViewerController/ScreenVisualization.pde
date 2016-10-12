@@ -28,6 +28,8 @@ public class ScreenVisualization implements Visualization {
       setBackground(130,30,0);
       displayExplanationText(f);
     } else {
+      setBackground(130,30,0);
+      displayGreetingText(f);
     }
   }
    
@@ -61,6 +63,14 @@ public class ScreenVisualization implements Visualization {
     textFont(font, 80 * vis_height / 1080);
     textAlign(CENTER, CENTER);
     text("NE NOUS FROISSONS PAS", vis_width/2+position_x, vis_height/2+position_y);
+  }
+
+  private void displayGreetingText(Frame f) {
+    textSize(32 * vis_height / 1080);
+    fill(205,209,209);
+    textFont(font, 80 * vis_height / 1080);
+    textAlign(CENTER, CENTER);
+    text("THE END :-)", vis_width/2+position_x, vis_height/2+position_y);
   }
   
   private void displayBall(Frame f) {

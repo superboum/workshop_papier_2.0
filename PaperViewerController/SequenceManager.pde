@@ -3,6 +3,7 @@ public class SequenceManager {
   private float limit = 0.8f;
   private ArrayList<Sequence> sequences;
   private int sequenceDurationTime = 10000;
+  private int sequenceGreetingDuration = 2000;
   
   public SequenceManager() {
     status = SequenceWait.getInstance();
@@ -21,6 +22,8 @@ public class SequenceManager {
       }
     } else if (sequences.get(sequences.size() - 1).getStartingTime() + sequenceDurationTime > millis()) {
       sequences.get(sequences.size() - 1).addFrame(f);
+    } else if (sequences.get(sequences.size() - 1).getStartingTime() + sequenceDurationTime + sequenceGreetingDuration > millis()) {
+      status = SequenceThanks.getInstance();
     } else {
       status = SequenceWait.getInstance();
     }
@@ -47,5 +50,15 @@ public static class SequenceInProgress implements SequenceStatus {
   public static SequenceInProgress getInstance() {
     if(SequenceInProgress.INSTANCE == null) { SequenceInProgress.INSTANCE = new SequenceInProgress(); }
     return SequenceInProgress.INSTANCE;
+  }
+}
+
+public static class SequenceThanks implements SequenceStatus {
+  private static SequenceThanks INSTANCE;
+  private SequenceThanks() {}
+  
+  public static SequenceThanks getInstance() {
+    if(SequenceThanks.INSTANCE == null) { SequenceThanks.INSTANCE = new SequenceThanks(); }
+    return SequenceThanks.INSTANCE;
   }
 }
