@@ -30,9 +30,9 @@ public abstract class ScreenVisualization implements Visualization {
   }
   
   protected void setBackground(int red, int green, int blue) {
+    noStroke();  
     fill(red, green, blue);    
     rect(position_x, position_y, vis_width, vis_height);
-    noStroke();  
   }
   
   protected void displayExplanationText(Frame f) {
@@ -53,10 +53,10 @@ public abstract class ScreenVisualization implements Visualization {
 
   protected void displayGreetingText(Frame f) {
     textSize(32 * vis_height / 1080);
-    fill(205,209,209);
+    fill(255,209,209);
     textFont(font, 80 * vis_height / 1080);
     textAlign(CENTER, CENTER);
-    text("FIN", vis_width/2+position_x, vis_height/2+position_y);
+    text("FIN !", vis_width/2+position_x, vis_height/2+position_y);
   }
   
   protected void displayBall(Frame f) {

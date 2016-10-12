@@ -32,7 +32,7 @@ void setup() {
   fullScreen(P2D, SPAN);
   //size(1024, 768);
   frameRate(60);
-  
+  background(255,209,209);
   font = loadFont("AlegreyaSans-Black-80.vlw");  
 }
 
