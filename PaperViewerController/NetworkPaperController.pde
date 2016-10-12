@@ -13,11 +13,11 @@ public class NetworkPaperController implements PaperController {
     String read = connection.readStringUntil('\n');
     if (read == null) return null;
     if (split(read, ' ')[0].contains("ETA")) {
-      status = new CalibrationStatus();
+      status = CalibrationStatus.getInstance();
       return read;
     }
     if (split(read, ' ')[0].contains("CAP")) {
-      status = new CaptureStatus();
+      status = CaptureStatus.getInstance();
       return read;
     }
     return null;
