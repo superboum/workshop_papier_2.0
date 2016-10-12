@@ -3,26 +3,31 @@ import java.util.*;
 PFont font;
 PaperController controller;
 ArrayList<Visualization> vis;
-Visualization hist;
+ArrayList<Visualization> hist;
+
+int divide_x, divide_y;
     
 void setup() {
   //controller = new FakePaperController("/home/qdufour/Documents/dev/processing/workshop_papier/ProcessData/example_data.txt");
   controller = new NetworkPaperController(this, "127.0.0.1", 5984);
   LED led = new LED(this);
   
+  divide_x = 3;
+  divide_y = 2;
+  
   vis = new ArrayList();
+  hist = new ArrayList();
   
-  /*for(int i = 0; i < 6; i++) {
-    for (int j = 0; j < 4; j++) {
-        vis.add(new ScreenVisualization(width/6, height/4, width / 6 * i, height / 4 * j));
+  for (int j = 0; j < divide_y; j++) {
+      for(int i = 0; i < divide_x; i++) {
+        if (i == 0 && j == 0) continue;
+        hist.add(new ReplayScreenVisualization(width/divide_x, height/divide_y, width / divide_x * i, height / divide_y * j));
     }
-  }*/
+  }
   
-  vis.add(new LiveScreenVisualization(width/3, height/2, 0, 0));
+  vis.add(new LiveScreenVisualization(width/divide_x, height/divide_y, 0, 0));
   vis.add(new LampVisualization(led));
-  
-  hist = new ReplayScreenVisualization(width/3, height/2, width/3, 0);
-  
+    
   smooth(8);
   fullScreen(P2D, SPAN);
   //size(1024, 768);
@@ -42,12 +47,12 @@ void draw() {
   else if (controller.getStatus() instanceof CaptureStatus) capture();
   
   List<Sequence> sequences = controller.getSequenceManager().getSequences();
-  if (sequences.size() > 0 && sequences.get(sequences.size() - 1).isFinished()) {
-    Frame f = sequences.get(sequences.size() - 1).iterateFrame();
-    hist.draw(f); 
-  } else if (sequences.size() > 1 && sequences.get(sequences.size() - 2).isFinished()) {
-    Frame f = sequences.get(sequences.size() - 2).iterateFrame();
-    hist.draw(f); 
+  int counter = 1, displayed = 0;
+  while (sequences.size() - counter >= 0 && displayed < hist.size()) {
+    Sequence s = sequences.get(sequences.size() - counter++);
+    if (s.isFinished()) {
+      hist.get(displayed++).draw(s.iterateFrame());
+    }
   }
 }
 

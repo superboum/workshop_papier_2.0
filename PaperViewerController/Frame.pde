@@ -3,6 +3,7 @@ public class Frame {
   private float x_center_position, y_center_position, x_center_delta, y_center_delta;
   public String raw;
   private int time;
+  private int[] backgroundColor;
   
   public Frame(String line) {
     time = millis();
@@ -18,6 +19,8 @@ public class Frame {
     y_center_position = float(numbers[6]);
     x_center_delta = float(numbers[7]);
     y_center_delta = float(numbers[8]);
+    
+    backgroundColor = new int[]{255,209,209};
   }
   
   public float getDetectedPixelCount() {
@@ -38,5 +41,15 @@ public class Frame {
   
   public int getTime() {
     return time;
+  }
+  
+  //@TODO Remove
+  public void setBackgroundColor(int red, int green, int blue) {
+    backgroundColor = new int[]{red, green, blue};
+  }
+  
+  //@TODO Remove
+  public int[] getBackgroundColor() {
+    return backgroundColor;
   }
 }

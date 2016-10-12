@@ -3,10 +3,13 @@ public class Sequence {
   private int startingTime;
   private boolean finished = false;
   private int cursor = 0;
+  private int[] backgroundColor;
   
   public Sequence() {
     frames = new ArrayList();
     startingTime = millis();
+    // @TODO remove
+    //backgroundColor = new int[]{(int)random(0,255), (int)random(0,255), (int)random(0,255)};
   }
   
   public Sequence(Frame f) {
@@ -37,6 +40,8 @@ public class Sequence {
   public Frame iterateFrame() {
     cursor++;
     if (cursor >= frames.size()) cursor = 0;
+    //@TODO Remove
+    //frames.get(cursor).setBackgroundColor(backgroundColor[0],backgroundColor[1],backgroundColor[2]);
     return frames.get(cursor);
   }
 }

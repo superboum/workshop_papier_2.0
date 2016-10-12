@@ -26,7 +26,7 @@ public abstract class ScreenVisualization implements Visualization {
   
   protected void displayBackground(Frame f) {
     if (abs(f.getEvolutionPixelCount()) > 0.08f) setBackground(40,0,0);
-    else setBackground(255, 209, 209);
+    else setBackground(f.getBackgroundColor()[0], f.getBackgroundColor()[1], f.getBackgroundColor()[2]);
   }
   
   protected void setBackground(int red, int green, int blue) {
@@ -56,7 +56,7 @@ public abstract class ScreenVisualization implements Visualization {
     fill(205,209,209);
     textFont(font, 80 * vis_height / 1080);
     textAlign(CENTER, CENTER);
-    text("THE END :-)", vis_width/2+position_x, vis_height/2+position_y);
+    text("FIN", vis_width/2+position_x, vis_height/2+position_y);
   }
   
   protected void displayBall(Frame f) {
