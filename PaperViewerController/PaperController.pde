@@ -4,6 +4,7 @@ public interface PaperController {
   public ControllerStatus getStatus();
   public void changeState();
   public SequenceManager getSequenceManager();
+  public void saveSequence(int n);
 }
 
 public interface ControllerStatus {

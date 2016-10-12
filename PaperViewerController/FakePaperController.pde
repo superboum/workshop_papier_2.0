@@ -31,4 +31,7 @@ public class FakePaperController implements PaperController {
   public SequenceManager getSequenceManager() {
     return null;
   }
+  
+  public void saveSequence(int n) {
+  }
 }

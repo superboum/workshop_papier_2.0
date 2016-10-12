@@ -6,10 +6,12 @@ public class SequenceManager {
   private ArrayList<Sequence> sequences;
   private int sequenceDurationTime = 10000;
   private int sequenceGreetingDuration = 2000;
+  private int sequenceHistorySize = 0;
   
-  public SequenceManager() {
+  public SequenceManager(int sequenceHistorySize) {
     status = SequenceWait.getInstance();
     sequences = new ArrayList();
+    this.sequenceHistorySize = sequenceHistorySize;
   }
   
   public SequenceStatus getStatus() {
@@ -25,6 +27,9 @@ public class SequenceManager {
       if (f.getDetectedPixelCount() > limit) {
         status = SequenceInProgress.getInstance();
         sequences.add(new Sequence(f));
+        if(sequences.size() > sequenceHistorySize) {
+          sequences.remove(0);
+        }
       }
     } else if (sequences.get(sequences.size() - 1).getStartingTime() + sequenceDurationTime > millis()) {
       sequences.get(sequences.size() - 1).addFrame(f);

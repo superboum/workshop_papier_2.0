@@ -11,9 +11,12 @@ void setup() {
   controller = new NetworkPaperController(this, "127.0.0.1", 5984);
   led = new LED(this);
   
+  int sequencesX = 3, sequencesY = 2;
+  controller.saveSequence(sequencesX*sequencesY);
+  
   selectedScreen = 0;
   screens = new ArrayList<Screen>();
-  screens.add(new GridScreen(3,2));
+  screens.add(new GridScreen(sequencesX,sequencesY));
   screens.add(new LiveScreen());
   
   smooth(8);
