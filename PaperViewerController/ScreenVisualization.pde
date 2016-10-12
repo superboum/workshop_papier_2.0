@@ -1,4 +1,4 @@
-public class ScreenVisualization implements Visualization {
+public abstract class ScreenVisualization implements Visualization {
   private int vis_width;
   private int vis_height;
   private int position_x;
@@ -18,38 +18,24 @@ public class ScreenVisualization implements Visualization {
   public void draw(Calibration c) {
     setBackground(c.red, c.green, c.blue);
   }
-
-  public void draw(Frame f) {
-    if (controller.getSequenceManager().getStatus() instanceof SequenceInProgress) {
-      displayBackground(f);
-      displayMainText(f);
-      displayBall(f);  
-    } else if (controller.getSequenceManager().getStatus() instanceof SequenceWait) {
-      setBackground(130,30,0);
-      displayExplanationText(f);
-    } else {
-      setBackground(130,30,0);
-      displayGreetingText(f);
-    }
-  }
    
   public void keyPressed() {
   }
   
   /** PRIVATE **/
   
-  private void displayBackground(Frame f) {
+  protected void displayBackground(Frame f) {
     if (abs(f.getEvolutionPixelCount()) > 0.08f) setBackground(40,0,0);
     else setBackground(255, 209, 209);
   }
   
-  private void setBackground(int red, int green, int blue) {
+  protected void setBackground(int red, int green, int blue) {
     fill(red, green, blue);    
     rect(position_x, position_y, vis_width, vis_height);
     noStroke();  
   }
   
-  private void displayExplanationText(Frame f) {
+  protected void displayExplanationText(Frame f) {
     textSize(32 * vis_height / 1080);
     fill(255,209,209);
     textFont(font, 80 * vis_height / 1080);
@@ -57,7 +43,7 @@ public class ScreenVisualization implements Visualization {
     text("MONTRE MOI TON PAPIER", vis_width/2+position_x, vis_height/2+position_y);
   }
   
-  private void displayMainText(Frame f) {
+  protected void displayMainText(Frame f) {
     textSize(32 * vis_height / 1080);
     fill(130,30,0);
     textFont(font, 80 * vis_height / 1080);
@@ -65,7 +51,7 @@ public class ScreenVisualization implements Visualization {
     text("NE NOUS FROISSONS PAS", vis_width/2+position_x, vis_height/2+position_y);
   }
 
-  private void displayGreetingText(Frame f) {
+  protected void displayGreetingText(Frame f) {
     textSize(32 * vis_height / 1080);
     fill(205,209,209);
     textFont(font, 80 * vis_height / 1080);
@@ -73,7 +59,7 @@ public class ScreenVisualization implements Visualization {
     text("THE END :-)", vis_width/2+position_x, vis_height/2+position_y);
   }
   
-  private void displayBall(Frame f) {
+  protected void displayBall(Frame f) {
     int red_ball = max(130, min(255, int(f.getDetectedPixelCount() * 1000)));
     int green_ball = min(30, int(f.getEvolutionPixelCount() * 2000)) + min(60, int(f.getDetectedPixelCount() * 1000));
     int blue_ball = min(0, int(f.getEvolutionPixelCount() * 500));

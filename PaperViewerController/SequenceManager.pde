@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class SequenceManager {
   private SequenceStatus status;
   private float limit = 0.8f;
@@ -14,6 +16,10 @@ public class SequenceManager {
     return status;
   }
   
+  public List<Sequence> getSequences() {
+    return sequences;
+  }
+  
   public void notifyFrame(Frame f) {
     if (status instanceof SequenceWait) {
       if (f.getDetectedPixelCount() > limit) {
@@ -24,6 +30,7 @@ public class SequenceManager {
       sequences.get(sequences.size() - 1).addFrame(f);
     } else if (sequences.get(sequences.size() - 1).getStartingTime() + sequenceDurationTime + sequenceGreetingDuration > millis()) {
       status = SequenceThanks.getInstance();
+      sequences.get(sequences.size() - 1).setFinished();
     } else {
       status = SequenceWait.getInstance();
     }

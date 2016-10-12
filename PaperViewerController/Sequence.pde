@@ -1,6 +1,8 @@
 public class Sequence {
   private ArrayList<Frame> frames;
   private int startingTime;
+  private boolean finished = false;
+  private int cursor = 0;
   
   public Sequence() {
     frames = new ArrayList();
@@ -20,7 +22,21 @@ public class Sequence {
     return startingTime;
   }
   
+  public void setFinished() {
+    finished = true;
+  }
+  
+  public boolean isFinished() {
+    return finished;
+  }
+  
   public ArrayList<Frame> getFrames() {
     return frames;
+  }
+  
+  public Frame iterateFrame() {
+    cursor++;
+    if (cursor >= frames.size()) cursor = 0;
+    return frames.get(cursor);
   }
 }
