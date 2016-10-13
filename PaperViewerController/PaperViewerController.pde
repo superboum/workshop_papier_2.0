@@ -11,7 +11,7 @@ void setup() {
   controller = new NetworkPaperController(this, "127.0.0.1", 5984);
   led = new LED(this);
   
-  int sequencesX = 3, sequencesY = 2;
+  int sequencesX = 6, sequencesY = 4;
   controller.saveSequence(sequencesX*sequencesY);
   
   selectedScreen = 0;

@@ -28,7 +28,7 @@ class Capture():
         self.com = Communication()
         self.com.start()
 
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(1)
         _, frame = self.cap.read()
         self.height, self.width, _ = frame.shape
         self.etalonnage_top_left = (self.width/2 - self.detection_size, self.height / 2 - self.detection_size)
