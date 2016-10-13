@@ -2,7 +2,7 @@ import java.util.*;
 
 public class SequenceManager {
   private SequenceStatus status;
-  private float limit = 0.8f;
+  private float limit = 0.6f;
   private ArrayList<Sequence> sequences;
   private int sequenceDurationTime = 10000;
   private int sequenceGreetingDuration = 2000;
