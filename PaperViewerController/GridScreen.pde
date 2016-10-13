@@ -28,7 +28,8 @@ public class GridScreen extends AbstractScreen {
     while (sequences.size() - counter >= 0 && displayed < hist.size()) {
       Sequence s = sequences.get(sequences.size() - counter++);
       if (s.isFinished()) {
-        hist.get(displayed++).draw(s.iterateFrame());
+        Frame f = s.iterateFrame();
+        if (f != null) hist.get(displayed++).draw(f);
       }
     }
   }
