@@ -40,7 +40,7 @@ public abstract class ScreenVisualization implements Visualization {
     fill(255,209,209);
     textFont(font, 80 * vis_height / 1080);
     textAlign(CENTER, CENTER);
-    text("MONTRE MOI TON PAPIER", vis_width/2+position_x, vis_height/2+position_y);
+    text("NE NOUS FROISSONS PAS", vis_width/2+position_x, vis_height/2+position_y);
   }
   
   protected void displayMainText(Frame f) {
