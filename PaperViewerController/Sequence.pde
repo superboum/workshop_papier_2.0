@@ -49,9 +49,7 @@ public class Sequence {
     if (deltaTime >= deltaSaveTime) {
       cursorTime = millis();
       cursor = nextCursor;
-      return frames.get(cursor);
-    } else {
-      return null;
     }
+    return frames.get(cursor);
   }
 }
